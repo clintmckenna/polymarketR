@@ -17,33 +17,6 @@ devtools::install_github("clintmckenna/polymarketR")
 ## Usage Examples
 
 ```r
-library(polymarketR)
-
-# Get events
-events <- get_events(limit = 5)
-
-# Get a single event by slug
-event <- get_event_by_slug("new-york-city-mayoral-election")
-
-# Get all markets for a specific event
-markets <- get_event_markets("new-york-city-mayoral-election")
-
-# Extract token IDs for all outcomes in an event's markets
-tokens <- extract_token_ids(markets)
-
-# Get historical prices for a Yes outcome token
-yes_token <- tokens$token_id[tokens$outcome == "Yes"][1]
-prices <- get_prices_history(market = yes_token, interval = "1d")
-
-# Search events by text (client-side search)
-mayoral_events <- search_events_text("mayor", limit = 50)
-```
-
-## Example Workflow: Retrieve and Plot Polymarket Event Price History
-
-Below is a full example of using the polymarketR package to search for an event, extract market and price history data, and plot a time series for Yes/No outcomes with ggplot2.
-
-```r
 # Load required libraries
 library(polymarketR)
 library(dplyr)
