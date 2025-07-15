@@ -1,6 +1,6 @@
 # polymarketR
 
-An R package to access, analyze, and visualize Polymarket event, market, and price data using public API endpoints.
+An R package to access, analyze, and visualize [Polymarket](https://polymarket.com) event, market, and price data using public API endpoints.
 
 ## Installation
 
@@ -27,7 +27,8 @@ event_results <- search_events_text("new york city mayoral election")
 print(event_results)
 
 # 2. Get event details by slug (use a known slug for stability)
-# Suppose we want to look at the 2024 New York City mayoral election. We can get the slug from the URL on Polymarket: https://polymarket.com/event/new-york-city-mayoral-election
+# Suppose we want to look at the 2025 New York City mayoral election. We can get the slug from the URL on Polymarket: 
+# https://polymarket.com/event/new-york-city-mayoral-election
 
 event_slug <- "new-york-city-mayoral-election"
 event <- get_event_by_slug(event_slug)
