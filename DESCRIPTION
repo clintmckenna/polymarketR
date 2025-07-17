@@ -1,7 +1,7 @@
 Package: polymarketR
 Type: Package
 Title: R Interface to Polymarket Prediction Markets
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Clint McKenna", email = "clint@calsocial.org", role = c("aut", "cre"))
 Description: Provides functions to access, analyze, and visualize Polymarket event, market, and price data using public API endpoints.
 License: MIT
