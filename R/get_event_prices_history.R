@@ -4,13 +4,14 @@
 #' fetches price history for each token, and returns a long-format tibble suitable for plotting/analysis.
 #'
 #' @param event_slug The event slug (character, required)
-#' @param interval Interval for price data (e.g., "1h", "1d", "1w", "max")
-#' @param ... Additional arguments passed to get_event_markets() or get_prices_history()
+#' @param interval Time window for price data: "1h", "6h", "1d", "1w", "1m", "max", or "all"
+#' @param fidelity Resolution of data in minutes (e.g., 1 = per-minute, 60 = hourly, 1440 = daily). Default is 60 (hourly).
+#' @param ... Additional arguments passed to get_event_markets()
 #' @return A tibble with columns: market_id, outcome, token_id, timestamp, price, volume, etc.
 #' @examples
-#' get_event_prices_history("new-york-city-mayoral-election", interval = "1d")
+#' get_event_prices_history("new-york-city-mayoral-election", interval = "max", fidelity = 1440)
 #' @export
-get_event_prices_history <- function(event_slug, interval = "1d", ...) {
+get_event_prices_history <- function(event_slug, interval = "max", fidelity = 60, ...) {
   markets <- get_event_markets(event_slug, ...)
   if (nrow(markets) == 0) {
     return(die_empty(cols = c("market_id", "outcome", "token_id", "timestamp", "price", "volume", "question", "slug", "startDate", "endDate", "datetime"), warn_msg = paste0("No markets found for event: ", event_slug)))
@@ -30,7 +31,7 @@ get_event_prices_history <- function(event_slug, interval = "1d", ...) {
   # Fetch price history for each token
   all_history <- lapply(seq_len(nrow(tokens_long)), function(i) {
     row <- tokens_long[i, ]
-    ph <- get_prices_history(row$token_id, interval = interval)
+    ph <- get_prices_history(row$token_id, interval = interval, fidelity = fidelity)
     if (nrow(ph) == 0) return(NULL)
     ph$market_id <- row$market_id
     ph$outcome <- row$outcome

@@ -34,8 +34,9 @@ event <- get_event_by_slug(event_slug)
 markets <- get_event_markets(event_slug)
 
 # Get price history for all Yes/No tokens in the event
-## Note: The interval and fidelity arguments are not always respected by the API—results may still be high-frequency.
-## By default, we exclude markets with zero liquidity.
+## The `interval` argument controls the time window (how far back): "1h", "6h", "1d", "1w", "1m", "max", or "all".
+## The `fidelity` argument controls the resolution in minutes: 1 = per-minute, 60 = hourly, 1440 = daily.
+## Without fidelity, the API defaults to 1-minute resolution, which can return a very large number of rows.
 history <- get_event_prices_history(event_slug, interval = "max", fidelity = 1440)
 
 # Plot a time series of prices for all markets and outcomes
@@ -85,7 +86,7 @@ user_holdings <- get_user_value(user = address)
 
 **Notes:**
 - Not all events/markets will have price history available for all tokens.
-- The interval parameter may not always be honored exactly by the API; you may receive lower- or higher-frequency data. Still trying to figure out a solution for this.
+- The `interval` parameter controls the time window (e.g., `"1w"` = last week, `"max"` = all time). Use the `fidelity` parameter to control resolution in minutes (e.g., `60` = hourly, `1440` = daily).
 - All package functions return tibbles for easy manipulation with dplyr/tidyverse tools.
 
 Thanks and feel free to suggest any changes or improvements!

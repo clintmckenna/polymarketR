@@ -21,9 +21,10 @@ get_event_markets <- function(event_slug, ...) {
     return(die_empty(cols = c("id", "slug", "question", "outcomes", "outcomePrices", "volume", "liquidity"), warn_msg = sprintf("No event or markets found for slug: %s", event_slug)))
   }
   markets <- event$markets[[1]]
-  # Filter out markets with zero liquidity
+  # Filter out markets with explicitly zero liquidity (keep NA, e.g. negRisk events)
   if (!is.null(markets$liquidity)) {
-    markets <- markets[as.numeric(markets$liquidity) > 0, ]
+    liq <- as.numeric(markets$liquidity)
+    markets <- markets[is.na(liq) | liq > 0, ]
   }
   if (nrow(markets) == 0) {
     warning(sprintf("No nonzero-liquidity markets found for event: %s", event_slug), call. = FALSE)

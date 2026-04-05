@@ -6,13 +6,13 @@
 #' @param market The CLOB token ID (character, required)
 #' @param start_ts Start timestamp (Unix epoch seconds, optional)
 #' @param end_ts End timestamp (Unix epoch seconds, optional)
-#' @param interval Interval for data points (e.g., "1h", "1d", "1w", "max")
-#' @param fidelity Resolution in minutes (optional)
+#' @param interval Time window for data: "1h", "6h", "1d", "1w", "1m", "max", or "all"
+#' @param fidelity Resolution of data in minutes (e.g., 1 = per-minute, 60 = hourly, 1440 = daily). Default is 60 (hourly).
 #' @return A tibble of historical price data
 #' @examples
 #' get_prices_history(market = "12541509255877010177934715422358422748052378132651567836811989084820478865881", interval = "1d")
 #' @export
-get_prices_history <- function(market, start_ts = NULL, end_ts = NULL, interval = "1d", fidelity = NULL) {
+get_prices_history <- function(market, start_ts = NULL, end_ts = NULL, interval = "max", fidelity = 60) {
   # Polymarket API requires either interval or startTs/endTs
   if (is.null(interval) && is.null(start_ts) && is.null(end_ts)) {
     interval <- "1d" # Default to daily if nothing supplied
