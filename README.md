@@ -22,12 +22,12 @@ library(polymarketR)
 library(ggplot2)
 
 # Search for an event by text (fuzzy search)
-event_results <- search_events_text("new york city mayoral election")
+event_results <- search_events_text("2026-fifa-world-cup-winner-595")
 
 # Get event details by slug (use a known slug for stability)
-# Suppose we want to look at the 2025 New York City mayoral election. We can get the slug from the URL on Polymarket:
-# https://polymarket.com/event/new-york-city-mayoral-election
-event_slug <- "new-york-city-mayoral-election"
+# Suppose we want to look at the 2026 FIFA World Cup Winner. We can get the slug from the URL on Polymarket:
+# https://polymarket.com/event/2026-fifa-world-cup-winner-595
+event_slug <- "2026-fifa-world-cup-winner-595"
 event <- get_event_by_slug(event_slug)
 
 # Extract all markets for the event
@@ -39,16 +39,22 @@ markets <- get_event_markets(event_slug)
 ## Without fidelity, the API defaults to 1-minute resolution, which can return a very large number of rows.
 history <- get_event_prices_history(event_slug, interval = "max", fidelity = 1440)
 
-# Plot a time series of prices for all markets and outcomes
-# (Here, we facet by groupItemTitle for clarity)
-ggplot(history, aes(x = datetime, y = price, color = outcome)) +
+# Plot a time series of prices for top markets (Yes outcome)
+top_markets <- markets %>%
+  mutate(currentPrice = str_extract(outcomePrices, "[0-9.]+")) %>%
+  mutate(currentPrice = as.numeric(currentPrice)) %>%
+  arrange(desc(currentPrice)) %>%
+  head(5)
+history_top <- history %>% filter(groupItemTitle %in% top_markets$groupItemTitle) %>%
+  filter(outcome == "Yes")
+
+ggplot(history_top, aes(x = datetime, y = price, color = groupItemTitle, group = groupItemTitle)) +
   geom_line() +
-  facet_wrap(~ groupItemTitle, scales = "free_y") +
   labs(
-    title = "Polymarket Price History: New York City Mayoral Election",
+    title = "Polymarket Price History: 2026 FIFA World Cup Winner",
     x = "Date",
     y = "Price (Probability)",
-    color = "Outcome"
+    color = "Country"
   ) +
   theme_minimal()
 
@@ -58,7 +64,7 @@ ggplot(history, aes(x = datetime, y = price, color = outcome)) +
 
 
 
-## Recently Added Functions
+## Tokens and On-Chain activity
 
 ```r
 # Get the best bid/ask price for a token (use a token_id from markets tibble)
@@ -82,6 +88,23 @@ holders <- get_holders(market = conId, limit = 10)
 # Get the total USD value of a user's holdings (across all or specific markets)
 user_holdings <- get_user_value(user = address)
 
+```
+
+## Comment Functions
+
+```r
+# Get comments for an event by slug (also works with market slugs)
+event_comments <- get_comments(slug = "2026-fifa-world-cup-winner-595", limit = 20)
+
+# Or by entity type and ID directly
+# get_comments(parent_entity_type = "Event", parent_entity_id = 23246, limit = 10)
+# get_comments(parent_entity_type = "market", parent_entity_id = 559657)
+
+# Get a single comment by its ID
+comment <- get_comment_by_id(comment_id = "2658324")
+
+# Get all comments by a specific user address
+user_comments <- get_comments_by_user(user_address = "0x3b34ba632c38d769dd6ef1339c7b0f48627e2579", limit = 20)
 ```
 
 **Notes:**
