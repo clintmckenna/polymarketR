@@ -54,7 +54,7 @@ ggplot(history, aes(x = datetime, y = price, color = outcome)) +
 
 ```
 
-![Polymarket price history plot](polymarket_price_history.png)
+![Polymarket price history plot](fifa_graph.png)
 
 
 
