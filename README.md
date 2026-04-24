@@ -22,7 +22,7 @@ library(polymarketR)
 library(ggplot2)
 
 # Search for an event by text (fuzzy search)
-event_results <- search_events_text("2026-fifa-world-cup-winner-595")
+event_results <- search_events("2026-fifa-world-cup-winner-595")
 
 # Get event details by slug (use a known slug for stability)
 # Suppose we want to look at the 2026 FIFA World Cup Winner. We can get the slug from the URL on Polymarket:

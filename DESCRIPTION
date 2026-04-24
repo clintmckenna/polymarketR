@@ -11,8 +11,8 @@ Depends: R (>= 3.5.0)
 Imports:
     httr,
     jsonlite,
-    tibble
-Suggests:
-    testthat,
+    tibble,
     dplyr
+Suggests:
+    testthat
 RoxygenNote: 7.2.3
